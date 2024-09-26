@@ -1,0 +1,170 @@
+BoxLayout:
+    orientation: 'vertical'
+    BoxLayout:
+        orientation: 'horizontal'
+        pos_hint: {"center_x":0.5,"center_y":0.5}
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1  # Red
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        MDIconButton:
+            icon: 'menu'
+            pos_hint: {"center_x":0.5,"center_y":0.5}
+            md_bg_color: 1,1,1,1
+        Label:
+            text: "SPANY"
+            color:0,0,0,1
+            font_size: "40sp"
+            bold: True
+            halign: 'center' 
+            valign: 'middle'
+        MDIconButton:
+            icon: "folder-open"
+            pos_hint: {"center_x":0.5,"center_y":0.5}
+            md_bg_color: 1,1,1,1
+            on_press: app.filechooser()
+    # box2
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_y: None
+        height: 500
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1  # green
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height:70
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1  # green
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            Label:
+                id: song_label
+                text:"No song selected"
+                size_hint:(1, 0.1)
+                color: (0,0,0,1)
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: 380
+            padding: 65
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1  # green
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            BoxLayout:
+                size_hint_y: None
+                height: 250
+                size_hint_x: None
+                width: 250
+                pos_hint: {"center_x":0.5,"center_y":0.5}
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1  # green
+                    Ellipse:
+                        pos: self.pos
+                        size: self.size
+               
+            
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height:50
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1  # green
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height:20
+                pos_hint: {"center_x":0.5,"center_y":0.5}
+                canvas.before:
+                    Color:
+                        rgba: 1, 1, 1, 1  # green
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                MDLabel:
+                    id: start_time_label
+                    padding: 20,0,0,0
+                    text: f"0.0s"
+                    halign: 'left'
+                MDLabel:
+                    id: start_time_label
+                    text: "4.0s"
+                    halign: 'right'
+                    padding: 0,0,20,0
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height:30
+                canvas.before:
+                    Color:
+                        rgba: 1, 1, 1, 1  # green
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                MDSlider:
+                    id: slider_bar
+                    min: 0
+                    max: 100
+                    value:0
+                    orientation: 'horizontal'
+                    pos_hint: {"center_x":0.5,"center_y":0.5}
+                    on_value:app.silderchange(self.value)
+    
+    BoxLayout:
+        orientation: 'vertical'
+        pos_hint: {"center_x":0.5,"center_y":0.5}
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: (None,None)
+            height:100
+            width: 300
+            spacing: 20
+            orientation: 'horizontal'
+            pos_hint: {"center_x":0.5,"center_y":0.5}
+            MDIconButton:
+                icon: 'repeat'
+            MDIconButton:
+                icon: 'shuffle'
+            MDIconButton:
+                icon: 'replay'
+            MDIconButton:
+                icon: 'volume-off'
+        
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: (None,None)
+            height:100
+            width: 265
+            pos_hint: {"center_x":0.5,"center_y":0.5}
+            MDIconButton:
+                icon: 'skip-previous'
+                icon_size: "40sp"
+                pos_hint: {"center_x":0.5,"center_y":0.5}
+                on_press: app.play_prev()
+            MDIconButton:
+                icon: "play-circle"
+                icon_size: "60sp"
+                pos_hint: {"center_x": .5, "center_y": .5}
+                on_press: app.play_music()
+            MDIconButton:
+                icon: "skip-next"
+                icon_size: "40sp"
+                pos_hint: {"center_x": .5, "center_y": .5}
+                on_press: app.play_next()
+                
