@@ -9,14 +9,11 @@ from kivy.uix.popup import Popup
 import os
 import pygame
 from kivy.clock import Clock
+import threading
 
 Window.size=(360,640)
 
-class SPANY(MDApp):
-    def build(self,**kwargs):
-        super().__init__(**kwargs)
-        pygame.mixer.init()
-        return Builder.load_file("spany.kv")
+class MUSIC_PLAYER(BoxLayout):
     def filechooser(self):
         print("file opening for choose")
         self.folder_chooser=FileChooserIconView(dirselect=True)
@@ -35,6 +32,7 @@ class SPANY(MDApp):
             folder_path=selected_folder[0]
             try:
                 self.song_list=[os.path.join(folder_path,file) for file in os.listdir(folder_path) if file.endswith((".mp3",".wav"))]
+                print(self.song_list)
             except Exception as error:
                 print("error")
             else:
@@ -51,28 +49,25 @@ class SPANY(MDApp):
     # slider
     def silderchange(self,value):
         if self.playing:
-            current_length = pygame.mixer.Sound(self.song_list[self.current_song_index]).get_length()
-            new_position = (value / 100) * current_length
-            pygame.mixer.music.stop()
+            new_position = (value / 100) * self.song_length
             pygame.mixer.music.load(self.song_list[self.current_song_index])
             pygame.mixer.music.play(0, new_position)
+ 
     
     def upadateslider(self,dt):
         if self.playing:
-            current_position = pygame.mixer.music.get_pos() / 1000 
-            current_length = pygame.mixer.Sound(self.song_list[self.current_song_index]).get_length()
-            if current_length>0:
-                # self.ids.slider_bar.value = (current_position / current_length) * 100
-                ...
+            current_position = pygame.mixer.music.get_pos()
+            if self.song_length>0:
+                self.ids.slider_bar.value = (current_position / self.song_length)**100
     
     def play_music(self):
         try:
-            self.song_list
+            print("byy",self.song_list)
             if not self.playing:
                 if 0<=self.current_song_index<=len(self.song_list):
-                    pygame.mixer.music.load(self.song_list[self.current_song_index])
-                    pygame.mixer.music.play()
-                    # Clock.schedule_interval(self.upadateslider, 1)
+                    threading.Thread(target=self._play_song).start()
+                    self.song_length = pygame.mixer.Sound(self.song_list[self.current_song_index]).get_length()
+                    # Clock.schedule_interval(self.upadateslider,0.5)
                     print("music playing...")
                     self.playing = True
             else:
@@ -82,6 +77,15 @@ class SPANY(MDApp):
                 # Clock.unschedule(self.upadateslider)
         except:
             print("no folder selected")
+    
+    def _play_song(self):
+        try:
+            pygame.mixer.music.load(self.song_list[self.current_song_index])
+            pygame.mixer.music.play()
+            while self.playing and pygame.mixer.music.get_busy():
+                pass
+        except Exception as e:
+            print("Error during playback:", e)
     
     def play_next(self):
         if self.song_list:
@@ -97,7 +101,11 @@ class SPANY(MDApp):
             self.play_music()
             print("previous song played")
 
-SPANY().run()
+class SPANY(MDApp):
+    def build(self):
+        pygame.mixer.init()
+        return MUSIC_PLAYER()
 
-
+if __name__ == '__main__':
+    SPANY().run()
 
