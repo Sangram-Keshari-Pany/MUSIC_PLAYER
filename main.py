@@ -11,7 +11,7 @@ import pygame
 from kivy.clock import Clock
 import threading
 
-Window.size=(360,640)
+
 
 class MUSIC_PLAYER(BoxLayout):
     def filechooser(self):
